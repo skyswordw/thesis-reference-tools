@@ -1,7 +1,7 @@
 [project]
 name = "thesis-refs"
 version = "0.1.0"
-description = "Single-DOCX thesis reference unification and Zotero handoff tools."
+description = "Tools for maintaining thesis references in Word with Zotero."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [

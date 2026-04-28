@@ -11,12 +11,14 @@ def test_readme_explains_chinese_zotero_layered_workflow():
     required_phrases = [
         "单 DOCX",
         "中国学位论文",
+        "学位论文",
+        "静态整理",
+        "可维护引用",
+        "后续维护",
         "Zotero Group Library",
         "Word 插件",
         "Refresh",
         "GB/T 7714-2015",
-        "静态基线",
-        "动态引用",
         "uv run python scripts/run_all.py --input examples/demo/raw/thesis.docx",
         "output/doc",
         "output/zotero",
@@ -24,6 +26,20 @@ def test_readme_explains_chinese_zotero_layered_workflow():
     ]
     for phrase in required_phrases:
         assert phrase in text
+
+
+def test_readme_uses_academic_workflow_tone_instead_of_outsourcing_terms():
+    text = README.read_text(encoding="utf-8")
+
+    forbidden = [
+        "交付",
+        "全托管",
+        "候选",
+        "产物目录",
+        "审计报告",
+    ]
+    for item in forbidden:
+        assert item not in text
 
 
 def test_readme_keeps_public_interface_sanitized_and_single_docx_only():
