@@ -5,39 +5,58 @@ description: Use when auditing or enriching Zotero Group Library metadata for a 
 
 # Thesis Zotero Metadata
 
-## Core Rule
+## When To Use
 
-Use a verification-first metadata patch route. Audit the existing Zotero Group Library, enrich missing or weak records through public scholarly metadata APIs, produce a reviewable patch, then apply changes to the existing group library before rebuilding and refreshing the dynamic Word deliverable.
+Use this skill when Zotero Group Library records need author cleanup, DOI/identifier enrichment, `itemType` correction, language correction, report/standard classification, or metadata patch preparation before rebuilding a Zotero dynamic thesis DOCX.
+
+Use `skills/thesis-zotero-dynamic/SKILL.md` for field generation, Word Refresh, bibliography rebuilding, and final DOCX audit. Use `skills/thesis-word-format/SKILL.md` for visible Word layout and citation-marker formatting.
+
+## Inputs And Outputs
+
+- Input: one complete single DOCX thesis file and an existing Zotero Group Library.
+- API key: project-local `.env.local` only.
+- Group identifier: `--group-id` or `ZOTERO_GROUP_ID`.
+- Audit output: `output/reports/zotero_metadata_audit.json` and `.md`.
+- Patch output: `output/reports/zotero_metadata_patch.json` and `.md`.
+- Apply log: `output/reports/zotero_metadata_apply_log.json`.
+- Downstream output: rebuilt Zotero dynamic DOCX plus final audit reports.
+
+## Standard Workflow
+
+1. Build or refresh the single DOCX reference model so the metadata audit has current citekeys and expected reference types.
+2. Audit the configured Zotero Group Library against project artifacts: title, author, year, Zotero `itemType`, `language`, DOI, URL, citekey, and expected GB/T type.
+3. Enrich incomplete records through Crossref, OpenAlex, and Semantic Scholar. Prefer exact DOI/title matches and record source confidence.
+4. Patch non-DOI records too. Reports, white papers, and research reports must be Zotero `report`; ITU-T recommendations and technical standards must be Zotero `standard`; journal and conference papers remain `journalArticle` and `conferencePaper`.
+5. Set language before Word Refresh: English scholarly items use `language=en-US` so bibliography output uses `et al.`; Chinese items use `language=zh-CN` so Chinese author lists may use `等`.
+6. Generate a reviewable metadata patch before applying anything.
+7. Apply only approved patches through the Zotero Web API.
+8. Rebuild the dynamic DOCX with the Zotero dynamic workflow, open it in Word, run Zotero Refresh, rebuild or refresh bibliography, and audit the final document.
+
+## Commands
+
+```bash
+uv run python scripts/run_all.py --input examples/demo/raw/thesis.docx
+uv run python scripts/audit_zotero_metadata.py --input examples/demo/raw/thesis.docx --group-id "$ZOTERO_GROUP_ID"
+uv run python scripts/enrich_zotero_metadata.py --input examples/demo/raw/thesis.docx --group-id "$ZOTERO_GROUP_ID"
+uv run python scripts/enrich_zotero_metadata.py --input examples/demo/raw/thesis.docx --group-id "$ZOTERO_GROUP_ID" --apply
+uv run python scripts/rebuild_dynamic_after_metadata.py --input examples/demo/raw/thesis.docx --group-id "$ZOTERO_GROUP_ID"
+```
+
+## Acceptance Checks
+
+- No duplicate citekeys in the Group Library.
+- No inverted English initials such as `firstName=Yang, lastName=D`.
+- No fake visible `Others` creator except the Zotero-compatible `others` marker where required.
+- DOI-bearing journal/conference items have container title, volume/issue/pages when public metadata provides them.
+- Expected `itemType` mismatches are zero: `report` for reports and white papers, `standard` for technical standards, `journalArticle` for journals, and `conferencePaper` for conferences.
+- English scholarly items have `language=en-US`; Chinese records have `language=zh-CN`.
+- Word Refresh after patching does not reintroduce Chinese `等` in English bibliography entries, `[Z]` fallbacks for reports/standards, or hidden DOI/URL formatting problems.
 
 ## Boundaries
 
 - Do not edit `raw/`; source Word documents are read-only.
-- Use the project-local `uv` environment for all Python commands.
+- Use project-local `uv` commands only.
 - Keep generated audits, patches, reports, and checkpoint DOCX files under `build/`, `output/`, or `tmp/`.
-- Store any Zotero Web API key only in project-local `.env.local`; never put it in global shell config, source files, committed docs, or generated reports.
-- Do not write to Zotero SQLite. Use the Zotero Web API or exported/generated project artifacts for updates.
-- Do not pursue scan-conversion experiments as a project route; they are not part of the accepted metadata or dynamic-citation workflow.
-
-## Metadata Completion Route
-
-1. Audit the configured Zotero Group Library, identified by a project-local setting such as `ZOTERO_GROUP_ID` in `.env.local`: compare item titles, authors, years, Zotero `itemType`, `language`, DOI/ISBN/URL fields, citekeys, and attachment/link state against the project reference artifacts.
-2. Enrich incomplete records through Crossref, OpenAlex, and Semantic Scholar. Prefer exact title/DOI matches, record the source used for each field, and leave uncertain matches flagged for manual review.
-3. Always patch non-DOI project references too. Reports, white papers, and research reports must be Zotero `report`; ITU-T recommendations and technical standards must be Zotero `standard`; journal and conference papers remain `journalArticle` and `conferencePaper`.
-4. Set item language before Word Refresh: English scholarly items use `language=en-US` so multi-author bibliography output uses `et al.`; Chinese items use `language=zh-CN` so Chinese author lists may still use `等`.
-5. Generate a reviewable metadata patch before applying anything. The patch should make additions or corrections explicit per Zotero item and keep rejected/uncertain candidates separate.
-6. Apply the approved patch to the configured Zotero group through the Zotero Web API using the project-local `.env.local` API key.
-7. Rebuild the dynamic DOCX using the project Zotero dynamic-citation workflow.
-8. Open the rebuilt document in Microsoft Word, run Zotero Refresh, regenerate or refresh the bibliography, and save a checkpoint copy.
-9. Audit the refreshed DOCX against the reference map and migration checklist. Treat the result as handoff-ready only when citation counts, item mappings, bibliography field presence, `itemType`/`language` corrections, and bibliography semantic checks all pass.
-
-## Evidence To Keep
-
-- Group Library audit report before changes.
-- Enrichment candidate report with source API and match confidence.
-- Approved metadata patch and application log.
-- Dynamic DOCX rebuild checkpoint.
-- Word Zotero Refresh result and final audit report.
-
-## Coordination
-
-Use `skills/thesis-zotero-dynamic/SKILL.md` for dynamic DOCX generation, Word Refresh validation, Group Library handoff, and citation-field auditing. This skill covers the metadata cleanup pass that should happen before or alongside that workflow.
+- Store Zotero Web API keys only in project-local `.env.local`; never put keys in global shell config, source files, committed docs, or generated reports.
+- Do not write to Zotero SQLite. Use the Zotero Web API for updates and local/exported artifacts for review.
+- Leave uncertain metadata matches flagged for manual review rather than applying speculative patches.

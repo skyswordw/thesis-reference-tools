@@ -1,4 +1,4 @@
 interface:
   display_name: "Thesis Zotero Metadata"
   short_description: "Audit and enrich thesis Zotero group metadata."
-  default_prompt: "Use $thesis-zotero-metadata to audit the thesis Zotero Group Library, prepare a metadata patch, apply approved updates, rebuild the dynamic DOCX, and verify it with Word Zotero Refresh plus audit evidence."
+  default_prompt: "Use this skill to audit a Zotero Group Library against the single DOCX reference model, prepare metadata patches, apply approved Web API updates, and verify the rebuilt dynamic DOCX after Word Refresh."

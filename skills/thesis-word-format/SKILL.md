@@ -5,32 +5,53 @@ description: Use when formatting Chinese doctoral thesis Word/DOCX deliverables,
 
 # Thesis Word Format
 
-## Core Workflow
+## When To Use
 
-1. Treat the Word file as the 博士学位论文 deliverable. Preserve DOCX structure and verify the rendered pages before calling it final.
-2. Read `references/degree-format-summary.md` before changing page layout, headings, body fonts, figure/table captions, or reference-list typography.
-3. Read `references/docx-format-execution-checklist.md` before making whole-document Word formatting changes.
-4. Read `references/citation-position-rules.md` before editing inline citations.
-5. Use `scripts/normalize_citation_markers.py` after reference renumbering to set terminal citation markers as Word superscript runs (上标).
-6. If `soffice` and Poppler are available, render DOCX -> PDF -> PNG and inspect pages. If they are missing, report that visual layout still needs local Word/LibreOffice review.
+Use this skill when a Chinese 博士学位论文 DOCX needs thesis layout checks, GB/T 7714 sequential reference presentation, inline citation 上标 formatting, or narrative citation cleanup such as `文献[n]`.
 
-## Citation Rules
+Use `skills/thesis-zotero-dynamic/SKILL.md` first when the task is about Zotero dynamic fields. Use `skills/thesis-zotero-metadata/SKILL.md` first when wrong bibliography semantics come from Zotero metadata.
 
-- Use sequential numeric references: final reference entries are `[n] Author. Title[type]. ...`.
-- For this project, dynamic Zotero bibliographies should use `NEU Thesis GB/T 7714-2015 Numeric`, not the stock Zotero GB/T style, so English authors remain title case, DOI/URL metadata stays in Zotero for verification, and the Word bibliography hides DOI/URL fields to match the school examples.
-- Bibliography 语义 format belongs to Zotero metadata plus CSL, not final-text patching. Fix `itemType`, `language`, author metadata, and the project CSL when `[R]`/`[S]`, `et al.`, `等`, DOI, or URL behavior is wrong.
-- After Zotero Refresh, run `scripts/postprocess_zotero_bibliography.py` only for layout and residue cleanup: remove bibliography anchor residue, restore hanging indent/line spacing, and keep Word field structure intact.
-- For citations used as evidence at the end of a clause or sentence, keep `[n]` attached to the sentence and set the marker as superscript.
-- For citations used as the grammatical subject at the start of a Chinese sentence, write `文献[n]指出/提出/认为...` or `作者在文献[n]中...`; keep `文献`/`作者在文献` baseline, but set the `[n]` marker as superscript.
-- Avoid English-paper phrasing like `Sun等[n]...` or `Chen等[n]...` as a Chinese sentence opener. Rewrite to `文献[n]...` unless the author name is semantically necessary.
-- When multiple references support one statement, use one marker such as `[1,3-5]`, not repeated adjacent markers.
+## Inputs And Outputs
 
-## Tooling
+- Input: one complete single DOCX thesis file.
+- Main static output: `output/doc/论文_统一编号.docx`.
+- Formatted citation-marker output: `output/doc/论文_统一编号_引用上标.docx`.
+- Report output: `output/reports/citation_marker_report.json`.
+- Reference files: `references/degree-format-summary.md`, `references/docx-format-execution-checklist.md`, and `references/citation-position-rules.md`.
+
+## Standard Workflow
+
+1. Read `references/degree-format-summary.md` before changing page layout, headings, body fonts, figure/table captions, or reference-list typography.
+2. Read `references/docx-format-execution-checklist.md` before whole-document Word formatting changes.
+3. Read `references/citation-position-rules.md` before editing inline citation placement.
+4. Run the reference pipeline on a single DOCX input before citation-marker normalization.
+5. Run `scripts/normalize_citation_markers.py` to set in-text numeric citation markers as superscript runs.
+6. Render DOCX to PDF/PNG with LibreOffice and Poppler when available; otherwise report the remaining visual-review risk.
+
+## Commands
 
 ```bash
-uv run python skills/thesis-word-format/scripts/normalize_citation_markers.py input.docx output.docx --report output/reports/citation_marker_report.json
+uv run python scripts/run_all.py --input examples/demo/raw/thesis.docx
+uv run python skills/thesis-word-format/scripts/normalize_citation_markers.py \
+  output/doc/论文_统一编号.docx \
+  output/doc/论文_统一编号_引用上标.docx \
+  --report output/reports/citation_marker_report.json
 ```
 
-The script styles all in-text numeric markers as superscript, rewrites English author-led sentence/clause openings such as `Chen等[n]...` to `文献[n]...`, and reports the rewrite count. It does not replace careful reading; inspect the report before final export.
+## Acceptance Checks
 
-Read the risk boundary in `references/docx-format-execution-checklist.md` before running the script on documents with Zotero fields, hyperlinks, footnotes, text boxes, bookmarks, or comments.
+- Terminal evidence citations keep `[n]` attached to the sentence and set `[n]` as Word superscript.
+- Chinese sentence-openers use `文献[n]指出/提出/认为...` or `作者在文献[n]中...`; `文献` remains baseline and only `[n]` is superscript.
+- English author-led openings such as `Chen等[n]...`, `Sun等[n]...`, or `Büsing等[n]...` are rewritten to `文献[n]...` unless the author name is semantically required.
+- Reference-list numbers `[n]` are baseline, not superscript.
+- Multiple references supporting one statement use one marker such as `[1,3-5]`, not repeated adjacent markers.
+- Dynamic Zotero bibliography semantics are fixed through Zotero metadata and CSL, not by patching final bibliography text.
+
+## Boundaries
+
+- Do not edit `raw/`; source Word documents are read-only.
+- Use project-local `uv` commands only.
+- Keep generated files under `build/`, `output/`, or temporary scratch directories.
+- Treat bibliography 语义 format as Zotero metadata plus CSL. Fix `itemType`, `language`, author metadata, and the project CSL when `[R]`/`[S]`, `et al.`, `等`, DOI, or URL behavior is wrong.
+- After Zotero Refresh, `scripts/postprocess_zotero_bibliography.py` may clean layout/residue only: anchor residue, hanging indent, line spacing, and field-safe formatting.
+- Preserve DOCX structure. Review risk boundaries before running on documents with Zotero fields, hyperlinks, footnotes, text boxes, bookmarks, or comments.
