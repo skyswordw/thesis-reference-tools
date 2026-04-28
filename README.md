@@ -113,13 +113,12 @@ uv run python scripts/generate_zotero_migration_checklist.py --input examples/de
 
 demo 的同类文件位于 `examples/demo/output/`，可以作为最小可运行样例。
 
-## 使用约定
+## 使用前知道
 
-- 不修改 `raw/` 或任何输入源 DOCX；所有生成文件写入 `build/`、`output/` 或 demo 输出目录。
-- 不提交个人论文、密钥、Zotero 账号信息或本机私有配置。
-- Zotero Web API key 只放项目本地 `.env.local`，不要写入全局 shell 配置或仓库文件。
-- Zotero 字段只能在生成副本中创建；用于实际论文前，必须经过 Word + Zotero Word 插件 `Refresh` 验证。
-- 参考文献的语义格式优先通过 Zotero metadata 和 CSL 修复；后处理脚本只负责清理残留、悬挂缩进、行距等版面问题。
+- 脚本会生成新文件，不会就地修改输入的 Word 文档。
+- 个人论文、Zotero API key 和本机配置不要提交到仓库；需要 key 时放在项目本地 `.env.local`。
+- 如果要让 Word 引用后续可刷新，最后仍需要用 Zotero Word 插件运行 `Refresh`。
+- 参考文献格式不对时，优先检查 Zotero 条目和项目 CSL；后处理脚本只处理缩进、行距、残留符号这类版面问题。
 
 ## 项目级 skills
 
