@@ -1,0 +1,4 @@
+interface:
+  display_name: "Thesis Word Format"
+  short_description: "Format Chinese doctoral thesis DOCX files and citation markers."
+  default_prompt: "Use this skill to format a doctoral thesis Word document according to the local standard and GB/T 7714 citation marker placement rules."

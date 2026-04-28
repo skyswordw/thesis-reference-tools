@@ -1,0 +1,82 @@
+[
+  {
+    "id": "ref001",
+    "type": "article-journal",
+    "title": "Alpha sensing route",
+    "author": [
+      {
+        "literal": "Demo Org"
+      }
+    ],
+    "note": "Global reference [1]; source 1.1 研究背景 local [1]",
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "container-title": "Demo Journal",
+    "volume": "12",
+    "issue": "1",
+    "page": "1-8"
+  },
+  {
+    "id": "ref002",
+    "type": "standard",
+    "title": "Q.4144: Signalling requirements for cross-operator service orchestration in computing power networks",
+    "author": [
+      {
+        "literal": "ITU-T"
+      }
+    ],
+    "note": "Global reference [2]; source 1.1 研究背景 local [2]",
+    "issued": {
+      "date-parts": [
+        [
+          2025
+        ]
+      ]
+    }
+  },
+  {
+    "id": "ref003",
+    "type": "article-journal",
+    "title": "Beta routing",
+    "author": [
+      {
+        "literal": "Demo Lab"
+      }
+    ],
+    "note": "Global reference [3]; source 第二章 相关工作 local [1]",
+    "issued": {
+      "date-parts": [
+        [
+          2025
+        ]
+      ]
+    },
+    "container-title": "Demo Journal",
+    "volume": "8",
+    "issue": "2",
+    "page": "20-29"
+  },
+  {
+    "id": "ref004",
+    "type": "report",
+    "title": "Gamma compute",
+    "author": [
+      {
+        "literal": "Demo Alliance"
+      }
+    ],
+    "note": "Global reference [4]; source 第二章 相关工作 local [2]",
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    }
+  }
+]

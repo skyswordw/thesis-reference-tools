@@ -1,0 +1,14 @@
+.DS_Store
+.venv/
+/build/
+/output/
+/tmp/
+.worktrees/
+.claude/
+.env.local
+.env.*.local
+.pytest_cache/
+__pycache__/
+*.py[cod]
+*.tmp
+~$*.docx

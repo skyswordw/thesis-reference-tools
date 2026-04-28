@@ -1,0 +1,101 @@
+{
+  "summary": {
+    "target_docx": "examples/demo/output/doc/论文_统一编号_demo.docx",
+    "unique_references": 4,
+    "citation_positions": 4,
+    "citation_paragraphs": 3,
+    "covered_citation_occurrences": 7,
+    "expected_citation_occurrences": 7,
+    "paragraph_coverage_ok": true,
+    "paragraph_coverage_mismatches": 0,
+    "invalid_global_ids": []
+  },
+  "coverage_mismatches": [],
+  "positions": [
+    {
+      "position_id": "P001",
+      "paragraph_index": 4,
+      "citation_index_in_paragraph": 1,
+      "source_chapter": "第一章 绪论",
+      "source_section": "1.1 研究背景",
+      "marker_text": "[1-2]",
+      "global_ids": [
+        1,
+        2
+      ],
+      "zotero_keys": [
+        "ref001",
+        "ref002"
+      ],
+      "titles": [
+        "Alpha sensing route",
+        "Q.4144: Signalling requirements for cross-operator service orchestration in computing power networks"
+      ],
+      "paragraph_text": "第一章引用本节文献[1-2]，其中后续章节会复用同一个技术标准。",
+      "search_hint": "第一章引用本节文献[1-2]，其中后续章节会复用同一个技术标准。"
+    },
+    {
+      "position_id": "P002",
+      "paragraph_index": 6,
+      "citation_index_in_paragraph": 1,
+      "source_chapter": "第二章 相关工作",
+      "source_section": "第二章 相关工作",
+      "marker_text": "[3-4]",
+      "global_ids": [
+        3,
+        4
+      ],
+      "zotero_keys": [
+        "ref003",
+        "ref004"
+      ],
+      "titles": [
+        "Beta routing",
+        "Gamma compute"
+      ],
+      "paragraph_text": "第二章引用[3-4]，并复用[2]。",
+      "search_hint": "第二章引用[3-4]，并复用[2]。"
+    },
+    {
+      "position_id": "P003",
+      "paragraph_index": 6,
+      "citation_index_in_paragraph": 2,
+      "source_chapter": "第二章 相关工作",
+      "source_section": "第二章 相关工作",
+      "marker_text": "[2]",
+      "global_ids": [
+        2
+      ],
+      "zotero_keys": [
+        "ref002"
+      ],
+      "titles": [
+        "Q.4144: Signalling requirements for cross-operator service orchestration in computing power networks"
+      ],
+      "paragraph_text": "第二章引用[3-4]，并复用[2]。",
+      "search_hint": "第二章引用[3-4]，并复用[2]。"
+    },
+    {
+      "position_id": "P004",
+      "paragraph_index": 7,
+      "citation_index_in_paragraph": 1,
+      "source_chapter": "第二章 相关工作",
+      "source_section": "第二章 相关工作",
+      "marker_text": "[4][2]",
+      "global_ids": [
+        4,
+        2
+      ],
+      "zotero_keys": [
+        "ref004",
+        "ref002"
+      ],
+      "titles": [
+        "Gamma compute",
+        "Q.4144: Signalling requirements for cross-operator service orchestration in computing power networks"
+      ],
+      "paragraph_text": "组合引用[4][2]需要保留顺序。",
+      "search_hint": "组合引用[4][2]需要保留顺序。"
+    }
+  ]
+}
